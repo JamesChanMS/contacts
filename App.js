@@ -1,0 +1,114 @@
+import React from 'react';
+import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Constants} from 'expo';
+
+import contacts, {compareNames, comparePhones, compareIds} from './contacts';
+
+import Row from './Row';
+
+export default class App extends React.Component {
+    state = {
+        showContacts: false,
+        contacts: contacts,
+    }
+
+    toggleContacts = () => {
+        this.setState(prevState => ({
+            showContacts: !prevState.showContacts
+        }))
+    }
+
+    // 只有state状态更新时 FlatList才会重新渲染
+    // clone that into a new array
+    // contacts: [...prevState.contacts].sort(compareNames),
+    sort = () => {
+        this.setState(prevState => ({
+            contacts: [...prevState.contacts].sort(compareNames)
+        }))
+    }
+
+
+    renderItem = obj => <Row {...(obj.item)} />
+
+    render() {
+
+        // 回显方法1
+        // if (this.state.showContacts) {
+        //     return (
+        //         <View style={styles.container}>
+        //             <Button title="切换显示" onPress={this.toggleContacts}/>
+        //             <ScrollView>
+        //                 {contacts.map(contact => <Row key={contact.key} {...contact}/>)}
+        //             </ScrollView>
+        //         </View>
+        //     )
+        // }
+        // return (
+        //     <View style={styles.container}>
+        //         <Button title="切换显示" onPress={this.toggleContacts}/>
+        //     </View>
+        // );
+
+        // 回显方法2 a ternary
+        // return (
+        //     <View style={styles.container}>
+        //         <Button title="切换显示" onPress={this.toggleContacts}/>
+        //         {
+        //             this.state.showContacts ? (
+        //                 <ScrollView>
+        //                     {contacts.map(contact => <Row key={contact.key} {...contact}/>)}
+        //                 </ScrollView>
+        //             ) : null
+        //         }
+        //     </View>
+        // )
+
+        // 回显方法3
+        // return (
+        //     <View style={styles.container}>
+        //         <Button title="切换显示" onPress={this.toggleContacts}/>
+        //         {
+        //             this.state.showContacts && (
+        //                 <ScrollView>
+        //                     {contacts.map(contact => <Row key={contact.key} {...contact}/>)}
+        //                 </ScrollView>
+        //             )
+        //         }
+        //     </View>
+        // )
+
+        // ScrollView 会渲染全部元素 不推荐
+        // <ScrollView></ScrollView>
+        // FlatList 只渲染当前页面 推荐
+        // <FlatList renderItem={this.renderItem} data={contacts} />
+
+        return (
+            <View style={styles.container}>
+                <Button title="切换" onPress={this.toggleContacts}/>
+                <Button title="排序" onPress={this.sort}/>
+                {
+                    this.state.showContacts && (
+                        <FlatList
+                            // renderItem={obj => <Row {...(obj.item)} />}
+                            renderItem={this.renderItem}
+                            data={this.state.contacts}
+                        />
+                    )
+                }
+            </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+
+        // flex: 1,
+        // backgroundColor: '#fff',
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        paddingTop: Constants.statusBarHeight,
+        // topBarButton: Constants.statusBarHeight,
+
+    },
+});
