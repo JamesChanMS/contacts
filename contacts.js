@@ -10,9 +10,7 @@ const lastNames = ['David', 'Ellison', 'Frank'];
 // 取随机数
 const rand = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-const generateName = () => `${firstNames[rand(firstNames.length - 1)]}${lastNames[rand(lastNames.length - 1)]}`;
-
-const generateName = () => `${firstNames[rand(firstNames.length - 1)]}`;
+const generateName = () => `${firstNames[rand(firstNames.length - 1)]} ${lastNames[rand(lastNames.length - 1)]}`;
 
 const generatePhoneNumber = () => `${rand(187, 100)}-${rand(9999, 1000)}-${rand(9999, 1000)}`;
 

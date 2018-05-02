@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Button, SectionList, StyleSheet, Text, View} from 'react-native';
 import {Constants} from 'expo';
 
 import contacts, {compareNames, comparePhones, compareIds} from './contacts';
-
-import Row from './Row';
+import ContactsList from './ContactsList'
 
 export default class App extends React.Component {
     state = {
@@ -27,8 +26,12 @@ export default class App extends React.Component {
         }))
     }
 
+    // renderItem = obj => <Row {...(obj.item)} />
+    // same as renderItem = obj => <Row name:{obj.item.name} phone:{obj.item.phone} />
 
-    renderItem = obj => <Row {...(obj.item)} />
+    // item: {name: String, phone: String}
+
+    // <Text>{props.name}</Text>
 
     render() {
 
@@ -82,18 +85,16 @@ export default class App extends React.Component {
         // FlatList 只渲染当前页面 推荐
         // <FlatList renderItem={this.renderItem} data={contacts} />
 
+
         return (
             <View style={styles.container}>
                 <Button title="切换" onPress={this.toggleContacts}/>
                 <Button title="排序" onPress={this.sort}/>
                 {
-                    this.state.showContacts && (
-                        <FlatList
-                            // renderItem={obj => <Row {...(obj.item)} />}
-                            renderItem={this.renderItem}
-                            data={this.state.contacts}
-                        />
-                    )
+                    this.state.showContacts &&
+                    <ContactsList
+                        contacts={this.state.contacts}
+                    />
                 }
             </View>
         )
@@ -102,9 +103,9 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-
         // flex: 1,
-        // backgroundColor: '#fff',
+        backgroundColor: '#323232',
+        // backgroundImage: radialGradient(ellipse at 50% 65%,#6ccef8 0,#21a9dd 41%,#155791 86%),
         // alignItems: 'center',
         // justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
