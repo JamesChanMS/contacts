@@ -4,16 +4,24 @@ import {Constants} from 'expo';
 
 import contacts, {compareNames, comparePhones, compareIds} from './contacts';
 import ContactsList from './ContactsList'
+import AddContactForm from './AddContactForm'
 
 export default class App extends React.Component {
     state = {
         showContacts: false,
+        showForm:false,
         contacts: contacts,
     }
 
     toggleContacts = () => {
         this.setState(prevState => ({
             showContacts: !prevState.showContacts
+        }))
+    }
+
+    toggleForm = () => {
+        this.setState(prevState => ({
+            showForm: !prevState.showForm
         }))
     }
 
@@ -85,11 +93,12 @@ export default class App extends React.Component {
         // FlatList 只渲染当前页面 推荐
         // <FlatList renderItem={this.renderItem} data={contacts} />
 
-
+        if (this.state.showForm) return <AddContactForm/>
         return (
             <View style={styles.container}>
                 <Button title="切换" onPress={this.toggleContacts}/>
                 <Button title="排序" onPress={this.sort}/>
+                <Button title="添加联系人" onPress={this.toggleForm}/>
                 {
                     this.state.showContacts &&
                     <ContactsList
@@ -105,7 +114,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
     container: {
         // flex: 1,
-        backgroundColor: '#323232',
+        backgroundColor: '#6ccef8',
         // backgroundImage: radialGradient(ellipse at 50% 65%,#6ccef8 0,#21a9dd 41%,#155791 86%),
         // alignItems: 'center',
         // justifyContent: 'center',
