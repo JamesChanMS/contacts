@@ -1,6 +1,11 @@
+// import Example from './examples/0-Switch';
+// export default Example;?
+
+
 import React from 'react';
 import {Button, SectionList, StyleSheet, Text, View} from 'react-native';
 import {Constants} from 'expo';
+import {createSwitchNavigator} from 'react-navigation';
 
 import contacts, {compareNames, comparePhones, compareIds} from './contacts';
 import ContactsList from './ContactsList'
@@ -38,7 +43,7 @@ export default class App extends React.Component {
     // contacts: [...prevState.contacts].sort(compareNames),
     sort = () => {
         this.setState(prevState => ({
-            contacts: [...prevState.contacts].sort(-compareNames)
+            contacts: [...prevState.contacts].sort(compareNames)
         }))
     }
 

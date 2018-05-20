@@ -89,7 +89,11 @@ export default class AddContactForm extends React.Component {
      * 推荐 prefer
      */
     validateForm = () => {
-        if (+this.state.phone >= 0 && this.state.phone.length === 11 && this.state.name.length >= 3) {
+        console.log(this.state);
+        const names = this.state.name.split(' ');
+        // if ('') == false
+        if (+this.state.phone >= 0 && this.state.phone.length === 11 && this.state.name.length >= 3
+            && names.length >= 2 && names[1]) {
             // return true
             this.setState({isFormValid: true})
         } else {
@@ -123,6 +127,9 @@ export default class AddContactForm extends React.Component {
 
     // when the this.state is updated, render might change.
     render() {
+        // console.error('This is a full page all alert');
+        // console.warn('This is a less aggressive warning');
+        // throw new Error('This is a full page all alert');
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <TextInput style={styles.input} value={this.state.name}

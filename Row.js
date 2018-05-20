@@ -3,6 +3,7 @@
  */
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
     row: {
@@ -16,5 +17,10 @@ const Row = props => (
         <Text>{props.phone}</Text>
     </View>
 )
+
+Row.protoTypes = {
+    name:PropTypes.string,
+    phone:PropTypes.string,
+}
 
 export default Row
