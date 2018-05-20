@@ -1,7 +1,7 @@
 /**
  * Created by Kim on 2018/4/18.
  */
-const NUM_CONTACTS = 20;
+const NUM_CONTACTS = 1;
 
 const firstNames = ['Ash', 'Ben', 'Chris'];
 

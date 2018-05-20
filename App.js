@@ -13,6 +13,13 @@ export default class App extends React.Component {
         contacts: contacts,
     }
 
+    addContact = newContact => {
+        this.setState(prevState => ({
+            showForm:false,
+            contacts: [...prevState.contacts, newContact]
+        }))
+    }
+
     toggleContacts = () => {
         this.setState(prevState => ({
             showContacts: !prevState.showContacts
@@ -25,12 +32,13 @@ export default class App extends React.Component {
         }))
     }
 
+
     // 只有state状态更新时 FlatList才会重新渲染
     // clone that into a new array
     // contacts: [...prevState.contacts].sort(compareNames),
     sort = () => {
         this.setState(prevState => ({
-            contacts: [...prevState.contacts].sort(compareNames)
+            contacts: [...prevState.contacts].sort(-compareNames)
         }))
     }
 
@@ -93,7 +101,7 @@ export default class App extends React.Component {
         // FlatList 只渲染当前页面 推荐
         // <FlatList renderItem={this.renderItem} data={contacts} />
 
-        if (this.state.showForm) return <AddContactForm/>
+        if (this.state.showForm) return <AddContactForm onSubmit={this.addContact}/>
         return (
             <View style={styles.container}>
                 <Button title="切换" onPress={this.toggleContacts}/>
