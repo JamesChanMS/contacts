@@ -2,7 +2,7 @@
  * Created by Kim on 2018/4/23.
  */
 import React from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
@@ -12,10 +12,12 @@ const styles = StyleSheet.create({
 });
 
 const Row = props => (
-    <View style={styles.row}>
+    <TouchableOpacity style={styles.row} onPress={() => {
+        props.onSelectContact(props);
+    }}>
         <Text>{props.name}</Text>
         <Text>{props.phone}</Text>
-    </View>
+    </TouchableOpacity>
 )
 
 Row.protoTypes = {
