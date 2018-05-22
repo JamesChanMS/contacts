@@ -15,7 +15,6 @@ const ContactsList = props => {
         <Row
             {...item}
             onSelectContact={(contact) => {
-                debugger;
                 props.onSelectContact(contact)
             }}
         />

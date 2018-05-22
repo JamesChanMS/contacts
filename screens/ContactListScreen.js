@@ -9,9 +9,15 @@ import ContactsList from '../ContactsList';
 export default class ContactListScreen extends React.Component {
     static navigationOptions = ({navigation}) => ({
         headerTitle: "我的账号",
-        headerRight: <Button title="添加" onPress={() => {
-            navigation.navigate('AddContact')
-        }}/>,
+        headerRight: (
+            <Button
+                title="添加"
+                color="purple"
+                onPress={() => {
+                    navigation.navigate('AddContact')
+                }}
+            />
+        ),
     })
 
     state = {
@@ -57,7 +63,7 @@ export default class ContactListScreen extends React.Component {
                         contacts={this.props.screenProps.contacts}
                         onSelectContact={contact => {
                             this.props.navigation.navigate('ContactDetails', {
-                                phone : contact.phone,
+                                phone: contact.phone,
                                 name: contact.name,
                             })
                         }}
