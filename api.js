@@ -33,3 +33,27 @@ export const fetchUsers = async () => {
     // same as return results.map(contact => processContact(contact));
     return results.map(processContact);
 }
+
+/**
+ * 异步调用 登录
+ * @returns {Promise.<void>}
+ */
+export const login = async (username, password) => {
+    const response = await fetch('http://192.168.0.5:3000', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, password})
+    })
+    // console.log(response);
+    /**
+     * 登录成功
+     */
+    if (response.ok) {
+        return true
+    }
+    /**
+     * 等待一个异步方法执行完成 返回错误信息
+     */
+    const errMessage = await response.text()
+    throw new Error(errMessage);
+}

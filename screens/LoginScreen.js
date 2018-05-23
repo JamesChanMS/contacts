@@ -4,6 +4,8 @@
 import React from 'react';
 import {Button, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
 
+import {login} from '../api';
+
 export default  class LoginScreen extends React.Component {
 
     state = {
@@ -21,15 +23,19 @@ export default  class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Text style={styles.error}>{this.state.err}</Text>
                 <TextInput placeholder='请输入手机号码'
                            value={this.state.username}
                            onChangeText={this.handleUsernameUpdate}
-                           style={styles.text}>
+                           style={styles.text}
+                           autoCapitalize="none">
                 </TextInput>
                 <TextInput placeholder='请您输入验证码'
                            value={this.state.password}
                            onChangeText={this.handlePasswordUpdate}
-                           style={styles.text}>
+                           style={styles.text}
+                           autoCapitalize="none"
+                           secureTextEntry={true}>
                 </TextInput>
                 <Button title="Press to Log In" onPress={this._login}/>
             </View>
@@ -37,15 +43,62 @@ export default  class LoginScreen extends React.Component {
 
     }
 
-    _login = () => {
-        // 假设登录成功了
-        fetch('http://localhost:8000', {
-            method: 'POST',
-            headers: {'content-type': 'application/json'},
-            body: JSON.stringify({username: this.state.username, password: this.state.password})
-        }).then(res => console.log(res));
-        this.props.navigation.navigate('Main');
+    /**
+     * 异步 async 关键字写法
+     * @returns {Promise.<void>}
+     * @private
+     */
+    _login = async () => {
+        // // 假设登录成功了
+        // const response = await fetch('http://192.168.0.5:3000', {
+        //     method: 'POST',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({username: this.state.username, password: this.state.password})
+        // })
+        // console.log(response);
+        // // if (response.status === 400
+        // //     || response.status === 401
+        // //     || response.status === 402
+        // //     || response.status === 403) {
+        // //
+        // // }
+        // /**
+        //  * 登录成功
+        //  */
+        // if (response.ok) {
+        //     this.props.navigation.navigate('Main');
+        //     return
+        // }
+        // /**
+        //  * 等待一个异步方法执行完成 返回错误信息
+        //  */
+        // const errMessage = await response.text()
+        // this.setState({err: errMessage})
+        /**
+         * 使用抽取的方法
+         */
+        try {
+            const success = await login(this.state.username, this.state.password)
+            this.props.navigation.navigate('Main');
+        } catch (err) {
+            const errMessage = err.message
+            this.setState({err: errMessage})
+        }
     };
+    /**
+     * 同步
+     * promise 写法
+     * @private
+     */
+    // _login = () => {
+    //     // 假设登录成功了
+    //     const response = fetch('http://localhost:3000', {
+    //         method: 'POST',
+    //         headers: {'content-type': 'application/json'},
+    //         body: JSON.stringify({username: this.state.username, password: this.state.password})
+    //     }).then(res => console.log(res));
+    //     this.props.navigation.navigate('Main');
+    // };
 }
 
 const styles = StyleSheet.create({
@@ -60,5 +113,9 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center',
 
+    },
+    error: {
+        textAlign: 'center',
+        color: 'red'
     }
 });
