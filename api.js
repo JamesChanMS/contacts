@@ -39,17 +39,20 @@ export const fetchUsers = async () => {
  * @returns {Promise.<void>}
  */
 export const login = async (username, password) => {
+    console.log(username, password);
     const response = await fetch('http://192.168.0.5:3000', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({username, password})
     })
-    // console.log(response);
+    console.log(response);
     /**
      * 登录成功
      */
     if (response.ok) {
-        return true
+        // const json = await response.json();
+        const {token} = await response.json();
+        return token
     }
     /**
      * 等待一个异步方法执行完成 返回错误信息

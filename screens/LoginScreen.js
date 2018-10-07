@@ -3,10 +3,19 @@
  */
 import React from 'react';
 import {Button, SectionList, StyleSheet, Text, TextInput, View} from 'react-native';
+import {connect} from  'react-redux';
+import PropTypes from 'prop-types';
 
-import {login} from '../api';
+import {logInUser} from '../redux/actions'
+// import {login} from '../api';
 
-export default  class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
+
+    static propTypes = {
+        err: PropTypes.string,
+        token: PropTypes.string,
+        logInUser: PropTypes.func
+    }
 
     state = {
         username: '',
@@ -23,7 +32,7 @@ export default  class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.error}>{this.state.err}</Text>
+                <Text style={styles.error}>{this.props.err}</Text>
                 <TextInput placeholder='请输入手机号码'
                            value={this.state.username}
                            onChangeText={this.handleUsernameUpdate}
@@ -40,7 +49,12 @@ export default  class LoginScreen extends React.Component {
                 <Button title="Press to Log In" onPress={this._login}/>
             </View>
         )
+    }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.token) {
+            this.props.navigation.navigate('Main');
+        }
     }
 
     /**
@@ -74,16 +88,23 @@ export default  class LoginScreen extends React.Component {
         //  */
         // const errMessage = await response.text()
         // this.setState({err: errMessage})
+
+
         /**
          * 使用抽取的方法
          */
-        try {
-            const success = await login(this.state.username, this.state.password)
-            this.props.navigation.navigate('Main');
-        } catch (err) {
-            const errMessage = err.message
-            this.setState({err: errMessage})
-        }
+        // try {
+        //     this.props.logInUser(this.state.username, this.state.password)
+        //     // const success = await login(this.state.username, this.state.password)
+        //
+        //     // this.props.navigation.navigate('Main');
+        // } catch (err) {
+        //     const errMessage = err.message
+        //     this.setState({err: errMessage})
+        // }
+
+        this.props.logInUser(this.state.username, this.state.password)
+
     };
     /**
      * 同步
@@ -92,7 +113,7 @@ export default  class LoginScreen extends React.Component {
      */
     // _login = () => {
     //     // 假设登录成功了
-    //     const response = fetch('http://localhost:3000', {
+    //     const response = fetch('http:  //localhost:3000', {
     //         method: 'POST',
     //         headers: {'content-type': 'application/json'},
     //         body: JSON.stringify({username: this.state.username, password: this.state.password})
@@ -119,3 +140,11 @@ const styles = StyleSheet.create({
         color: 'red'
     }
 });
+
+const mapStateToProps = state => ({
+    err: state.user.loginErr,
+    token: state.user.token,
+
+})
+
+export default connect(mapStateToProps, {logInUser})(LoginScreen)

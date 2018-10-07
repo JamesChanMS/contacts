@@ -224,6 +224,7 @@
 import React from 'react';
 import {Button, SectionList, StyleSheet, Text, View} from 'react-native';
 import {Constants} from 'expo';
+import { PersistGate } from 'redux-persist/integration/react'
 
 // import contacts, {compareNames, comparePhones, compareIds} from './contacts';
 import {createStackNavigator, createSwitchNavigator, createBottomTabNavigator} from 'react-navigation';
@@ -232,9 +233,14 @@ import ContactListScreen from  './screens/ContactListScreen';
 import ContactDetailsScreen from  './screens/ContactDetailsScreen';
 import LoginScreen from  './screens/LoginScreen';
 import SettingScreen from  './screens/SettingScreen';
+import PureButtonScreen from  './screens/PureButtonScreen';
+
 import {fetchUsers} from './api'
 
 import {Ionicons} from 'react-native-vector-icons';
+
+import {store, persistor} from './redux/store';
+import {Provider} from 'react-redux';
 
 const ContactsTab = createStackNavigator({
     AddContact: AddContactScreen,
@@ -323,10 +329,22 @@ export default class App extends React.Component {
     }
 
     render() {
-        return <AppNavigator screenProps={{
-            contacts: this.state.contacts,
-            addContact: this.addContact
-        }}/>;
+        return (
+            <Provider store={store}>
+                <View style={styles.container}>
+                    <PureButtonScreen/>
+                </View>
+                {/*<PersistGate loading={null} persistor={persistor}>
+                    <AppNavigator
+                        // screenProps={{
+                        //     contacts: this.state.contacts,
+                        //     addContact: this.addContact
+                        // }}
+
+                    />
+                </PersistGate>*/}
+            </Provider>
+        )
     }
 }
 
@@ -335,6 +353,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#6ccef8',
         // backgroundImage: radialGradient(ellipse at 50% 65%,#6ccef8 0,#21a9dd 41%,#155791 86%),
         paddingTop: Constants.statusBarHeight,
-
+        flex:1
     },
 });
