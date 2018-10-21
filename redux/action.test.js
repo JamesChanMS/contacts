@@ -23,17 +23,62 @@ describe('updateUser returns actions', () => {
 //     expect(actions.updateUser({name: ""})).toMatchSnapshot()
 // })
 
-describe('logInUser returns actions',  () => {
+describe('logInUser returns actions', () => {
+
+    const fakeToken = 'thisIsATestToken'
+    const errMessage = 'incorrect credentials'
+
+    const mockLogin = (username, password) => {
+        if (username === 'u' && password === 'p') {
+            return fakeToken
+        }
+        throw new Error(errMessage)
+    }
+
     // const dispatch = () => {
     //
     // }
 
-    it('dispatches LOG_IN_SENT',async () => {
+    /**
+     * 登录请求
+     */
+    it('dispatches LOG_IN_SENT', async () => {
         const mockDispatch = jest.fn()
         await actions.logInUser('', '')(mockDispatch)
         // all the args that the mock fn was invoked on
         // mockDispatch.mock.calls
         console.log(mockDispatch.mock.calls);
-        expect(mockDispatch.mock.calls[0][0]).toBe({type:actions.LOG_IN_SENT})
+        /**
+         *  toBe 匹配引用地址
+         *  toEqual 匹配具体的值
+         */
+        expect(mockDispatch.mock.calls[0][0]).toEqual({type: actions.LOG_IN_SENT})
+    })
+
+    /**
+     * 登录成功
+     */
+    it('dispatches LOG_IN_FULFILLED with correct credentials', async () => {
+        const mockDispatch = jest.fn()
+        await actions.logInUser('u', 'p', mockLogin)(mockDispatch)
+        expect(mockDispatch.mock.calls[1][0]).toEqual({
+            type: actions.LOG_IN_FULFILLED,
+            payload: fakeToken
+        })
+        expect(mockDispatch.mock.calls[1]).toMatchSnapshot()
+    })
+
+    /**
+     * 登录失败
+     */
+    it('dispatches LOG_IN_REJECTED with incorrect credentials', async () => {
+        const mockDispatch = jest.fn()
+        await actions.logInUser('', 'p', mockLogin)(mockDispatch)
+
+        expect(mockDispatch.mock.calls[1][0]).toEqual({
+            type: actions.LOG_IN_REJECTED,
+            payload: errMessage
+        })
+        expect(mockDispatch.mock.calls[1]).toMatchSnapshot()
     })
 })
