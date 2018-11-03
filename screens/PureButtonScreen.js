@@ -2,7 +2,7 @@
  * Created by Kim on 2018/10/3.
  */
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import {Text, StyleSheet, View, Image} from 'react-native';
 import PureButton from '../PureButton';
 
 import {Constants} from 'expo';
@@ -11,6 +11,9 @@ import {changeFirstContact} from '../redux/actions'
 // import store from '../redux/store';
 
 import {connect} from 'react-redux';
+
+var Dimensions = require('Dimensions');
+var { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
@@ -21,10 +24,20 @@ const styles = StyleSheet.create({
     },
     button: {
         alignSelf: "center"
-    }
+    },
+    image:{
+        width:width,
+        height:width * 9 / 16,
+    },
+    banner: {
+        // height: height,
+        // lineHeight:height,
+    },
 });
 
 export default class PureButtonScreen extends React.Component {
+
+
     state = {
         count: 0,
     }
@@ -51,6 +64,11 @@ export default class PureButtonScreen extends React.Component {
                             title="increment count 自增"
                             onPress={this.inc}
                 />
+                <View style={styles.banner}>
+                    <Image style={styles.image}
+                           source={require('../image/splash.jpg')}>
+                    </Image>
+                </View>
             </View>
         )
     }
